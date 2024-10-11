@@ -29,6 +29,23 @@ resource "aws_security_group" "allow_ssh_http_https" {
     description = "Allow HTTPS from anywhere"
   }
 
+ingress {
+    description      = "Custom TCP - Grafana"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description      = "Custom TCP - Prometheus"
+    from_port        = 9090
+    to_port          = 9090
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+
   # Egress rules
   egress {
     from_port   = 0
