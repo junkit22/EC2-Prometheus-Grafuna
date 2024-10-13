@@ -6,32 +6,32 @@ Steps
 2. Allow port 9090 for Prometheus and 3000 for Grafana and 9100 for Node Exporter (Set in terraform)
 
 3. Connect to the Prometheus server using ssh:
-    ssh -i "key-name" host-user@host-ip
+         ssh -i "key-name" host-user@host-ip
 
 4. a. Download  Prometheus
-    wget -LO https://github.com/prometheus/prometheus/releases/download/v2.54.1/prometheus-2.54.1.linux-amd64.tar.gz
+        wget -LO https://github.com/prometheus/prometheus/releases/download/v2.54.1/prometheus-2.54.1.linux-amd64.tar.gz
 
 
     b. Extract Prometheus
-    tar -xvf prometheus-2.54.1.linux-amd64.tar.gz
+         tar -xvf prometheus-2.54.1.linux-amd64.tar.gz
 
     c. Move the binaries to /usr/local/bin
-    sudo mv prometheus-2.54.1.linux-amd64/prometheus prometheus-2.54.1.linux-amd64/promtool /usr/local/bin 
+        sudo mv prometheus-2.54.1.linux-amd64/prometheus prometheus-2.54.1.linux-amd64/promtool /usr/local/bin 
 
     d. create directories for configuration files and other Prometheus data.
-    sudo mkdir /etc/prometheus /var/lib/prometheus
+        sudo mkdir /etc/prometheus /var/lib/prometheus
 
     e. Move the configuration files to the directory we made previously:
-    sudo mv prometheus-2.54.1.linux-amd64/consoles prometheus-2.54.1.linux-amd64/console_libraries /etc/prometheus
+        sudo mv prometheus-2.54.1.linux-amd64/consoles prometheus-2.54.1.linux-amd64/console_libraries /etc/prometheus
 
     f. delete the leftover files
-    rm -r prometheus-2.54.1.linux-amd64*
+        rm -r prometheus-2.54.1.linux-amd64*
 
     g. Configure Prometheus
-    sudo vi /etc/hosts
+        sudo vi /etc/hosts
 
-    c. Edit the prometheus.yml file and change the localhost to a public IPv4 address on the EC2 instance:
-        Location: \etc\prometheus\prometheus.yml 
+    h. Edit the prometheus.yml file and change the localhost to a public IPv4 address on the EC2 instance:
+         Location: \etc\prometheus\prometheus.yml 
         
         static_configs:
       - targets: ["44.222.236.121:9090"]
