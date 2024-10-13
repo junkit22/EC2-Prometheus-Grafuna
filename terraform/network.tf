@@ -4,6 +4,10 @@ resource "aws_security_group" "allow_ssh_http_https" {
   description = "Security Group to allow SSH, HTTP, and HTTPS traffic"
   vpc_id      = aws_vpc.main.id
 
+  tags = {
+    Name = var.sg_name
+  }
+
   # Ingress rules
   ingress {
     from_port   = 22
@@ -71,7 +75,7 @@ resource "aws_vpc" "main" {
   instance_tenancy = "default"
 
   tags = {
-    Name = "junjie-tf-vpc"
+    Name = var.vpc_name
   }
 }
 
@@ -209,6 +213,7 @@ resource "aws_network_acl_rule" "allow_all_traffic" {
   cidr_block     = "0.0.0.0/0"
   from_port      = 0
   to_port        = 0
+
 }
 
 # Inbound rule for custom TCP port 9090 (rule number 101)

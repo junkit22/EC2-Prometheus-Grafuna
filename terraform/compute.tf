@@ -34,7 +34,7 @@ resource "aws_instance" "example" {
   user_data = <<-EOF
     #!/bin/bash
     yum update -y
-    yum install gir -y
+    yum install git -y
     yum install httpd -y
     yum install docker -y
     systemctl start httpd
@@ -44,7 +44,7 @@ resource "aws_instance" "example" {
     chmod 2775 /var/www
     find /var/www -type d -exec chmod 2775 {} \;
     find /var/www -type f -exec chmod 0664 {} \;
-    echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
+    echo "<h1>Hello World Jun Jie from $(hostname -f)</h1>" > /var/www/html/index.html
   EOF
 
   tags = {
