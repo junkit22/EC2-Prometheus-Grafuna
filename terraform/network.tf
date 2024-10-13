@@ -45,6 +45,14 @@ ingress {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description      = "Custom TCP - Node Exporter"
+    from_port        = 9100
+    to_port          = 9100
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
 
   # Egress rules
   egress {
@@ -180,4 +188,61 @@ resource "aws_route_table" "private_az2" {
 resource "aws_route_table_association" "private_subnet_az2_association" {
   subnet_id      = aws_subnet.private_subnet_az2.id
   route_table_id = aws_route_table.private_az2.id
+}
+
+resource "aws_network_acl" "my_acl" {
+  vpc_id = aws_vpc.my_vpc.id
+}
+
+resource "aws_network_acl_association" "my_acl_association" {
+  subnet_id      = aws_subnet.my_subnet.id
+  network_acl_id = aws_network_acl.my_acl.id
+}
+
+# Inbound rule for all traffic (rule number 100)
+resource "aws_network_acl_rule" "allow_all_traffic" {
+  network_acl_id = aws_network_acl.my_acl.id
+  rule_number    = 100
+  egress         = false
+  protocol       = "-1"  # -1 means all protocols
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 0
+  to_port        = 0
+}
+
+# Inbound rule for custom TCP port 9090 (rule number 101)
+resource "aws_network_acl_rule" "allow_tcp_9090" {
+  network_acl_id = aws_network_acl.my_acl.id
+  rule_number    = 101
+  egress         = false
+  protocol       = "6"   # 6 means TCP
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 9090
+  to_port        = 9090
+}
+
+# Inbound rule for custom TCP port 3000 (rule number 102)
+resource "aws_network_acl_rule" "allow_tcp_3000" {
+  network_acl_id = aws_network_acl.my_acl.id
+  rule_number    = 102
+  egress         = false
+  protocol       = "6"   # 6 means TCP
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 3000
+  to_port        = 3000
+}
+
+# Inbound rule for custom TCP port 9100 (rule number 103)
+resource "aws_network_acl_rule" "allow_tcp_9100" {
+  network_acl_id = aws_network_acl.my_acl.id
+  rule_number    = 103
+  egress         = false
+  protocol       = "6"   # 6 means TCP
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 9100
+  to_port        = 9100
 }
