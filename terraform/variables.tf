@@ -1,3 +1,58 @@
+# Variable for AWS region
+variable "region" {
+  description = "AWS region"
+  default     = "us-east-1"
+}
+
+# Variable for instance type of Grafana
+variable "grafana_instance" {
+  description = "Instance type for Grafana"
+  type        = string
+  default     = "t2.micro"
+}
+
+# Variable for VPC Name
+variable "vpc_name" {
+  description = "Name of VPC to use"
+  type        = string
+  default     = "junjie-tf-vpc" # Update with your own VPC name, found under VPC > your VPC > Tags > value of Name
+}
+
+# Variable for security group name of Grafana
+variable "security_group_name" {
+  description = "Grafana security group name"
+  type        = string
+  default     = "grafana-security-group"
+}
+
+# Variable for instance type of Prometheus
+variable "prometheus_instance" {
+  description = "Instance type for Prometheus"
+  type        = string
+  default     = "t2.micro"
+}
+
+# Variable for security group name of Prometheus
+variable "prom_security_group_name" {
+  description = "Prometheus security group name"
+  type        = string
+  default     = "prometheus-security-group"
+}
+
+# Variable for instance type of Node Exporter
+variable "node_exporter_instance" {
+  description = "Instance type for Node Exporter"
+  type        = string
+  default     = "t2.micro"
+}
+
+# Variable for security group name of Node Exporter
+variable "node_exporter_security_group_name" {
+  description = "Prometheus security group name"
+  type        = string
+  default     = "node-exporter-security-group"
+}
+
 variable "ami_id" {
   description = "AMI ID"
   type        = string
@@ -14,28 +69,4 @@ variable "instance_type" {
   description = "EC2 Instance type"
   type        = string
   default     = "t2.micro"
-}
-
-variable "key_name" {
-  description = "Name of EC2 Key Pair"
-  type        = string
-  default     = "junjie-tf-keypair-07102024" # Replace with your own key pair name (without .pem extension) that you have downloaded from AWS console previously
-}
-
-variable "sg_name" {
-  description = "Name of EC2 security group"
-  type        = string
-  default     = "junjie-ec2-allow-ssh-http-https" # Replace with your own preferred security group name that gives an overview of the security group coverage
-}
-
-variable "vpc_name" {
-  description = "Name of VPC to use"
-  type        = string
-  default     = "junjie-tf-vpc" # Update with your own VPC name, found under VPC > your VPC > Tags > value of Name
-}
-
-variable "subnet_name" {
-  description = "Name of subnet to use"
-  type        = string
-  default     = "junjie-subnet-public1-us-east-1a" # Update with your own Subnet name, found under VPC > your VPC > selected Public Subnet > tags > value of Name
 }

@@ -1,4 +1,6 @@
 # EC2-Prometheus-Grafuna
+https://blog.devops.dev/elevating-your-monitoring-game-terraforming-your-aws-infrastructure-for-grafana-and-prometheus-377ddb9373c3
+https://blog.devops.dev/elevating-your-monitoring-game-terraforming-your-aws-infrastructure-for-grafana-and-prometheus-377ddb9373c3
 
 ## Links:
 Prometheus: http://54.175.79.80:9090/
