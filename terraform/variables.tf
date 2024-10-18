@@ -70,3 +70,16 @@ variable "instance_type" {
   type        = string
   default     = "t2.micro"
 }
+
+variable "sg_name" {
+  description = "The SG Name to create SG with"
+  type        = string
+  default     = "junjie-tf-sg-allow-ssh-http-https"
+}
+
+variable "sg_name2" {
+  description = "The SG Name with Prometheus and Grafana"
+  type        = string
+  default     = "junjie-tf-sg-allow-prometheus-grafana"
+}
+

@@ -1,4 +1,4 @@
-## Additional Challenge 1 - Create Key Pair and download to local file
+
 # Create EC2 Key Pair
 resource "tls_private_key" "example" {
   algorithm = "RSA"
@@ -18,30 +18,18 @@ resource "local_file" "private_key" {
   }
 }
 
-/*
-# Define data source to fetch the latest Ubuntu AMI for Ubuntu 24.04 from AWS
-data "aws_ami" "server_ami" {
-  most_recent = true
-
-  owners = ["099720109477"]
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-}
-*/
-
 # Define the EC2 instance
 resource "aws_instance" "example" {
   ami             = var.ami_id # Amazon Linux 2023 AMI ID
   instance_type   = var.instance_type
-  #key_name       = "junjie-useast1-13072024"
   key_name         = aws_key_pair.generated_key.key_name # Part of additional challenge 1
   subnet_id        = aws_subnet.public_subnet_az1.id
-  # security_groups  = [aws_security_group.allow_ssh_http_https.id] # Use the security group
+  security_groups  = [aws_security_group.allow_ssh_http_https.id,aws_security_group.allow_prometheus_grafana_node_exporter.id] # Use the security group
   associate_public_ip_address = true # Enable public IP
-
+  user_data                   = file("installers.sh")
+  tags = {
+    Name = var.ec2_name
+  }
 }
 
 # Create VPC
@@ -167,65 +155,4 @@ resource "aws_route_table" "private_az2" {
 resource "aws_route_table_association" "private_subnet_az2_association" {
   subnet_id      = aws_subnet.private_subnet_az2.id
   route_table_id = aws_route_table.private_az2.id
-}
-
-
-# AWS instance for Grafana
-resource "aws_instance" "Grafana" {
-  ami             = var.ami_id # Amazon Linux 2023 AMI ID
-  instance_type          = var.grafana_instance
-  subnet_id              = aws_subnet.public_subnet_az1.id
-  vpc_security_group_ids = [aws_security_group.grafana_sg.id]
-
-  # Enable public IP
-  associate_public_ip_address = true
-
-  # Use generated key pair
-  key_name               = aws_key_pair.generated_key.key_name
-
-  # User Data in AWS EC2
-  user_data = file("grafana install.sh")
-
-  tags = {
-    Name = "junjie-Grafana"
-  }
-}
-
-# AWS instance for Prometheus
-resource "aws_instance" "Prometheus" {
-  ami             = var.ami_id # Amazon Linux 2023 AMI ID
-  instance_type          = var.prometheus_instance
-  subnet_id              = aws_subnet.public_subnet_az1.id
-  vpc_security_group_ids = [aws_security_group.prometheus_sg.id]
-
-  # Enable public IP
-  associate_public_ip_address = true
-
-  # Use generated key pair
-  key_name               = aws_key_pair.generated_key.key_name
-
-  tags = {
-    Name = "junjie-Prometheus"
-  }
-}
-
-# AWS instance for Node Exporter
-resource "aws_instance" "Node_Exporter" {
-  ami             = var.ami_id # Amazon Linux 2023 AMI ID
-  instance_type          = var.node_exporter_instance
-  subnet_id              = aws_subnet.public_subnet_az1.id
-  vpc_security_group_ids = [aws_security_group.node_exporter_sg.id]
-
-  # Enable public IP
-  associate_public_ip_address = true
-
-  # Use generated key pair
-  key_name               = aws_key_pair.generated_key.key_name
-
-  # User Data in AWS EC2
-  user_data = file("apache install.sh")
-
-  tags = {
-    Name = "junjie-Node Exporter"
-  }
 }
